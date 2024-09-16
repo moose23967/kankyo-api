@@ -8,6 +8,13 @@ export const application = new Elysia({ name: 'application' })
   .use(authenticationPlugin)
   .use(modelsPlugin)
   .use(await logicPlugin())
-  .use(await routesPlugin());
+  .use(await routesPlugin())
+  .onStart(({ server }) => {
+    // biome-ignore lint/suspicious/noConsole: <explanation>
+    // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+    console.log(
+      `🦊 Elysia is running at http://${server?.hostname}:${server?.port}`,
+    );
+  });
 
 export type Application = typeof application;
