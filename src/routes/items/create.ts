@@ -1,25 +1,25 @@
-import type { App } from '@/app';
+import type { Application } from '@/application';
 import { items } from '@/services/db/schemas/items.schema';
 import { t } from 'elysia';
 
-export default function createRoute(app: App) {
-  return app.post(
+export default function routeItemCreate(application: Application) {
+  return application.post(
     '/items',
     async ({ body, headers, authentication, logic }) => {
-      const { userId } = await authentication.authenticate(
+      const { userIdentifier } = await authentication.authenticate(
         headers.authorization,
       );
 
-      await logic.database.insert(items).values({ userId, ...body });
+      await logic.database.insert(items).values({ userIdentifier, ...body });
     },
     {
       headers: 'users.authorization',
       body: t.Object({
-        key: t.String({ description: 'Item key' }),
-        value: t.String({ description: 'Item value' }),
+        key: t.String(),
+        value: t.String(),
       }),
       response: {
-        400: 'errors.alreadyExists',
+        400: 'errors.already-exists',
         401: 'errors.unauthorized',
       },
       detail: {

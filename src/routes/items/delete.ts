@@ -1,30 +1,35 @@
-import type { App } from '@/app';
+import type { Application } from '@/application';
 import { NotFound } from '@/errors';
 import { items } from '@/services/db/schemas/items.schema';
 import { and, eq } from 'drizzle-orm';
 
-export default function deleteRoute(app: App) {
-  return app.delete(
+export default function routeItemDelete(application: Application) {
+  return application.delete(
     '/items/:id',
     async ({ headers, authentication, logic, params }) => {
-      const { userId } = await authentication.authenticate(
+      const { userIdentifier } = await authentication.authenticate(
         headers.authorization,
       );
 
       try {
         await logic.database
           .delete(items)
-          .where(and(eq(items.userId, userId), eq(items.id, params.id)));
+          .where(
+            and(
+              eq(items.userIdentifier, userIdentifier),
+              eq(items.identifier, params.identifier),
+            ),
+          );
       } catch {
         throw NotFound;
       }
     },
     {
       headers: 'users.authorization',
-      params: 'items.id',
+      params: 'items.identifier',
       response: {
         401: 'errors.unauthorized',
-        404: 'errors.notFound',
+        404: 'errors.not-found',
       },
       detail: {
         summary: 'Delete',

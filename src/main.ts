@@ -1,3 +1,3 @@
-import { app } from './app.ts';
+import { application } from './application.ts';
 
-app.listen(process.env.PORT || 3000);
+application.listen(process.env.PORT || 3000);

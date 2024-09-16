@@ -4,10 +4,10 @@ import { logicPlugin } from './plugins/logic.plugin.ts';
 import { modelsPlugin } from './plugins/models.plugin.ts';
 import { routesPlugin } from './plugins/routes.plugin.ts';
 
-export const app = new Elysia({ name: 'app' })
+export const application = new Elysia({ name: 'application' })
   .use(authenticationPlugin)
   .use(modelsPlugin)
   .use(await logicPlugin())
   .use(await routesPlugin());
 
-export type App = typeof app;
+export type Application = typeof application;

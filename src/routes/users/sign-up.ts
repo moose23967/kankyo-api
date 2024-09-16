@@ -1,15 +1,15 @@
-import type { App } from '@/app';
+import type { Application } from '@/application';
 import { AlreadyExists } from '@/errors';
 import { users } from '@/services/db/schemas/users.schema';
 
-export default function signUpRoute(app: App) {
-  return app.post(
+export default function routeUserSignUp(application: Application) {
+  return application.post(
     '/users/sign-up',
     async ({ body, logic, jwt }) => {
       // biome-ignore lint/correctness/noUndeclaredVariables: <explanation>
       const passwordHash = await Bun.password.hash(body.password);
 
-      let user: { id: number };
+      let user: { identifier: number };
 
       try {
         [user] = await logic.database
@@ -25,7 +25,7 @@ export default function signUpRoute(app: App) {
 
       return {
         token: await jwt.sign({
-          userId: user.id,
+          userIdentifier: user.identifier,
         }),
       };
     },
@@ -33,7 +33,7 @@ export default function signUpRoute(app: App) {
       body: 'users.credentials',
       response: {
         200: 'users.token',
-        400: 'errors.alreadyExists',
+        400: 'errors.already-exists',
       },
       detail: {
         summary: 'Sign up',

@@ -1,6 +1,6 @@
 import { defineConfig } from 'drizzle-kit';
 
-const config = defineConfig({
+const configuration = defineConfig({
   dialect: 'postgresql',
   schema: 'src/services/db/schemas/*',
   out: 'drizzle',
@@ -9,4 +9,4 @@ const config = defineConfig({
   },
 });
 
-export default config;
+export default configuration;

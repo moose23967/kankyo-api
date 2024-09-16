@@ -12,21 +12,20 @@ export class Logic {
     database: NodePgDatabase<{ users: typeof users; items: typeof items }>,
   ) {
     this.database = database;
-
     this.#findOne = database.query.items
       .findFirst({
         where: and(
-          eq(items.userId, sql.placeholder('userId')),
-          eq(items.id, sql.placeholder('id')),
+          eq(items.userIdentifier, sql.placeholder('userIdentifier')),
+          eq(items.identifier, sql.placeholder('identifier')),
         ),
       })
       .prepare('findOne');
   }
 
-  async findOne(options: { userId: number; id: number }) {
+  async findOne(options: { userIdentifier: number; identifier: number }) {
     const item = await this.#findOne.execute({
-      userId: options.userId,
-      id: options.id,
+      userIdentifier: options.userIdentifier,
+      identifier: options.identifier,
     });
 
     if (!item) {

@@ -1,11 +1,11 @@
-import type { App } from '@/app';
+import type { Application } from '@/application';
 import { InvalidEmailOrPassword } from '@/errors';
 import { modelError } from '@/plugins/models.plugin';
 import { users } from '@/services/db/schemas/users.schema';
 import { eq } from 'drizzle-orm';
 
-export default function signInRoute(app: App) {
-  return app.post(
+export default function routeUserSignIn(application: Application) {
+  return application.post(
     '/users/sign-in',
     async ({ body, logic, jwt }) => {
       const user = await logic.database.query.users.findFirst({
@@ -28,7 +28,7 @@ export default function signInRoute(app: App) {
 
       return {
         token: await jwt.sign({
-          userId: user.id,
+          userIdentifier: user.identifier,
         }),
       };
     },

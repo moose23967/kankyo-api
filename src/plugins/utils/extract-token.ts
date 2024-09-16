@@ -2,7 +2,7 @@ import { Unauthorized } from '@/errors';
 
 const regExp = /Bearer (.*)/;
 
-export function getToken(authorization: string) {
+export function extractToken(authorization: string) {
   const result = authorization.match(regExp);
 
   if (!result) {
